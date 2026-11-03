@@ -12,6 +12,26 @@ logger = logging.getLogger("uvicorn")
 def get_engine_and_base():
     db_url = settings.DATABASE_URL
 
+    # Force SQLAlchemy to use the installed psycopg2 driver
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace(
+        "postgres://",
+        "postgresql+psycopg2://",
+        1
+    )
+elif db_url.startswith("postgresql://"):
+    db_url = db_url.replace(
+        "postgresql://",
+        "postgresql+psycopg2://",
+        1
+    )
+elif db_url.startswith("postgresql+psycopg://"):
+    db_url = db_url.replace(
+        "postgresql+psycopg://",
+        "postgresql+psycopg2://",
+        1
+    )
+
     if not db_url:
         raise RuntimeError("DATABASE_URL is not configured.")
 
