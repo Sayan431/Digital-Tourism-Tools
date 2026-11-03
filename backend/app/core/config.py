@@ -19,11 +19,11 @@ class Settings:
     
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL", 
-        "postgresql+psycopg2://neondb_owner:npg_8AjChB0rpmTX@ep-tiny-brook-ahledph2-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
+        ""
     )
     DB_SCHEMA: str = os.getenv("DB_SCHEMA", "digital_tourism")
     
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "digital-tourism-management-secret-key-super-secure-2026-production")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
     
