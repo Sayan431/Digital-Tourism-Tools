@@ -12,30 +12,10 @@ logger = logging.getLogger("uvicorn")
 def get_engine_and_base():
     db_url = settings.DATABASE_URL
 
-    # Force SQLAlchemy to use the installed psycopg2 driver
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace(
-        "postgres://",
-        "postgresql+psycopg2://",
-        1
-    )
-elif db_url.startswith("postgresql://"):
-    db_url = db_url.replace(
-        "postgresql://",
-        "postgresql+psycopg2://",
-        1
-    )
-elif db_url.startswith("postgresql+psycopg://"):
-    db_url = db_url.replace(
-        "postgresql+psycopg://",
-        "postgresql+psycopg2://",
-        1
-    )
-
     if not db_url:
         raise RuntimeError("DATABASE_URL is not configured.")
 
-    # Allow SQLite only when explicitly configured for local development.
+    # Explicit SQLite configuration for local development only
     if db_url.startswith("sqlite"):
         engine = create_engine(
             db_url,
@@ -44,13 +24,26 @@ elif db_url.startswith("postgresql+psycopg://"):
         base = declarative_base()
         return engine, base
 
-    # PostgreSQL connection (Neon in production)
-    if db_url.startswith("postgresql+psycopg://"):
+    # Normalize PostgreSQL URL to use psycopg2
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace(
+            "postgres://",
+            "postgresql+psycopg2://",
+            1
+        )
+    elif db_url.startswith("postgresql+psycopg://"):
         db_url = db_url.replace(
             "postgresql+psycopg://",
             "postgresql+psycopg2://",
             1
-    )
+        )
+    elif db_url.startswith("postgresql://"):
+        db_url = db_url.replace(
+            "postgresql://",
+            "postgresql+psycopg2://",
+            1
+        )
+
     engine = create_engine(
         db_url,
         pool_pre_ping=True,
