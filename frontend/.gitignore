@@ -24,3 +24,22 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+.env
+**/.env
+
+# Node
+node_modules/
+dist/
+
+# Database
+*.db
+
+# Environment files
+.env.local
+.env.production
