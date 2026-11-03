@@ -25,6 +25,12 @@ def get_engine_and_base():
         return engine, base
 
     # PostgreSQL connection (Neon in production)
+    if db_url.startswith("postgresql+psycopg://"):
+        db_url = db_url.replace(
+            "postgresql+psycopg://",
+            "postgresql+psycopg2://",
+            1
+    )
     engine = create_engine(
         db_url,
         pool_pre_ping=True,
